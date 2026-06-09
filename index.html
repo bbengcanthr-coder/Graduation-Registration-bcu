@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบขึ้นทะเบียนบัณฑิต | มหาวิทยาลัยเบงจันทร์</title>
+    <!-- นำเข้าฟอนต์ Prompt แบบไม่มีหัว -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --navy-blue: #0B2447; /* สีกรมเข้ม */
             --navy-light: #19376D;
-            --bg-color: #FFFFFF;
+            --bg-color: #F8FAFC; /* ปรับพื้นหลังนอกกรอบให้เป็นสีเทาอ่อนมาก ๆ เพื่อให้กรอบฟอร์มดูเด่นและคลีนขึ้น */
             --text-main: #333333;
             --text-muted: #666666;
             --border-color: #E2E8F0;
@@ -36,10 +37,10 @@
         .container {
             width: 100%;
             max-width: 480px;
-            background: #fff;
+            background: #FFFFFF;
             padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(11, 36, 71, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(11, 36, 71, 0.06);
             border-top: 6px solid var(--navy-blue);
         }
 
@@ -52,28 +53,36 @@
             color: var(--navy-blue);
             font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .header p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            font-weight: 300;
+            font-weight: 400;
         }
 
-        .header .highlight {
-            display: inline-block;
-            background-color: #F8FAFC;
-            padding: 4px 12px;
+        .badge-container {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .badge {
+            background-color: #F1F5F9;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--navy-light);
-            margin-top: 10px;
+            font-weight: 500;
             border: 1px solid var(--border-color);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         label {
@@ -89,19 +98,19 @@
         select {
             width: 100%;
             padding: 12px 16px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             font-size: 0.95rem;
             outline: none;
-            transition: all 0.3s ease;
-            background-color: #FAFAFA;
+            transition: all 0.2s ease;
+            background-color: #FCFDFE;
             color: var(--text-main);
         }
 
         input:focus, select:focus {
             border-color: var(--navy-blue);
-            background-color: #FFF;
-            box-shadow: 0 0 0 3px rgba(11, 36, 71, 0.1);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(11, 36, 71, 0.08);
         }
 
         .btn-submit {
@@ -110,72 +119,139 @@
             background-color: var(--navy-blue);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
         }
 
         .btn-submit:hover {
             background-color: var(--navy-light);
+            transform: translateY(-1px);
         }
 
         .btn-submit:disabled {
             background-color: #A0AABF;
             cursor: not-allowed;
+            transform: none;
         }
 
-        /* ส่วนแสดงผลเมื่อลงทะเบียนสำเร็จ */
+        /* ----- ส่วนแสดงผลสำเร็จ (Success State) ----- */
         #success-state {
             display: none;
             text-align: center;
-            padding: 20px 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .check-icon {
-            width: 60px;
-            height: 60px;
-            background-color: #E8F5E9;
-            color: #2E7D32;
+            width: 64px;
+            height: 64px;
+            background-color: #F0FDF4;
+            color: #16A34A;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            font-size: 32px;
             margin: 0 auto 20px auto;
         }
 
-        #success-state h2 {
+        #success-title {
             color: var(--navy-blue);
-            margin-bottom: 10px;
+            margin-bottom: 24px;
+            font-size: 1.3rem;
+            line-height: 1.4;
         }
 
-        #success-state p {
+        .info-card {
+            background-color: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
             color: var(--text-muted);
+            min-width: 90px;
+        }
+
+        .info-value {
+            color: var(--navy-blue);
+            font-weight: 500;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .success-footer {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .success-footer strong {
+            color: var(--navy-blue);
+            display: block;
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            color: var(--navy-blue);
+            border: 1px solid var(--navy-blue);
+            border-radius: 10px;
             font-size: 0.95rem;
-            line-height: 1.5;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 24px;
+        }
+
+        .btn-outline:hover {
+            background-color: #F1F5F9;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- หน้าฟอร์มลงทะเบียน -->
         <div id="form-state">
             <div class="header">
                 <h1>ระบบขึ้นทะเบียนบัณฑิต</h1>
                 <p>มหาวิทยาลัยเบงจันทร์</p>
-                <div class="highlight">เปิดระบบ: 9 มิ.ย. - 9 ก.ค. 2569</div>
-                <div class="highlight" style="margin-top: 5px; background: transparent; border: none; color: var(--text-muted);">
-                    กำหนดการรับปริญญา: 31 ก.ค. 2569
+                <div class="badge-container">
+                    <span class="badge">เปิดระบบ: 9 มิ.ย. - 9 ก.ค. 2569</span>
                 </div>
             </div>
 
             <form id="graduation-form">
                 <div class="form-group">
                     <label for="fullname">ชื่อ-นามสกุล</label>
-                    <input type="text" id="fullname" placeholder="นาย/นางสาว..." required>
+                    <input type="text" id="fullname" placeholder="ระบุชื่อและนามสกุล" required>
                 </div>
 
                 <div class="form-group">
@@ -201,7 +277,7 @@
                         <option value="คณะวิศวกรรมศาสตร์">คณะวิศวกรรมศาสตร์</option>
                         <option value="คณะแพทยศาสตร์">คณะแพทยศาสตร์</option>
                         <option value="คณะนิเทศศาสตร์">คณะนิเทศศาสตร์</option>
-                        <option value="คณะเกษตรศาสตร์">คณะเกษตรศาสตร์</option>
+                         <option value="คณะเกษตรศาสตร์">คณะเกษตรศาสตร์</option>
                         <option value="คณะสถาปัตยกรรมศาสตร์และการออกแบบ">คณะสถาปัตยกรรมศาสตร์และการออกแบบ</option>
                         <option value="คณะวิจิตรศิลป์">คณะวิจิตรศิลป์</option>
                         <option value="คณะดุริยางคศาสตร์">คณะดุริยางคศาสตร์</option>
@@ -232,18 +308,50 @@
             </form>
         </div>
 
+        <!-- หน้าแสดงผลความสำเร็จ (จะแสดงหลังจากกด submit) -->
         <div id="success-state">
             <div class="check-icon">✓</div>
-            <h2>ขึ้นทะเบียนสำเร็จ</h2>
-            <p>รายชื่อนี้ขึ้นทะเบียนจบเรียบร้อยแล้ว<br>เจอกันในวันรับปริญญา 31 กรกฎาคม 2569 (จบคอมมู)</p>
+            <!-- ข้อความตรงนี้จะเปลี่ยนไปตามระดับปริญญา -->
+            <h2 id="success-title">ท่านขึ้นทะเบียน...เรียบร้อยแล้ว</h2>
+            
+            <!-- การ์ดสรุปข้อมูล -->
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">ชื่อ-สกุล</span>
+                    <span class="info-value" id="res-fullname">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">ระดับปริญญา</span>
+                    <span class="info-value" id="res-degree">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">คณะ</span>
+                    <span class="info-value" id="res-faculty">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">สาขา</span>
+                    <span class="info-value" id="res-major">-</span>
+                </div>
+                <div class="info-row" id="row-honors">
+                    <span class="info-label">เกียรตินิยม</span>
+                    <span class="info-value" id="res-honors">-</span>
+                </div>
+            </div>
+
+            <p class="success-footer">
+                ยินดีด้วยกับความสำเร็จ เจอกันในวันรับปริญญา
+                <strong>31 กรกฎาคม 2569</strong>
+            </p>
+
+            <button type="button" class="btn-outline" onclick="window.location.reload()">กลับสู่หน้าหลัก</button>
         </div>
     </div>
 
+    <!-- Firebase SDK (Modular V10) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDcjUukTSvF8A_5_259m3wFTDJ3-2r8_xM",
   authDomain: "graduation-registration.firebaseapp.com",
@@ -264,13 +372,12 @@ const firebaseConfig = {
         const successState = document.getElementById('success-state');
 
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // ป้องกันการรีเฟรชหน้าเว็บ
+            e.preventDefault();
 
-            // เปลี่ยนสถานะปุ่ม
             submitBtn.textContent = 'กำลังบันทึกข้อมูล...';
             submitBtn.disabled = true;
 
-            // เก็บค่าจากฟอร์ม
+            // 1. ดึงข้อมูลจากฟอร์ม
             const fullname = document.getElementById('fullname').value;
             const degreeLevel = document.getElementById('degree-level').value;
             const year = document.getElementById('year').value;
@@ -279,7 +386,7 @@ const firebaseConfig = {
             const honors = document.getElementById('honors').value;
 
             try {
-                // บันทึกลง Firestore ในคอลเล็กชันชื่อ "registrations"
+                // 2. บันทึกลง Firebase Firestore
                 await addDoc(collection(db, "registrations"), {
                     fullname: fullname,
                     degreeLevel: degreeLevel,
@@ -290,7 +397,33 @@ const firebaseConfig = {
                     timestamp: serverTimestamp()
                 });
 
-                // สลับหน้าจอเมื่อบันทึกเสร็จ
+                // 3. คำนวณคำนำหน้าให้ถูกต้องตามระดับปริญญา
+                let titleWord = "";
+                if (degreeLevel === "ปริญญาตรี") {
+                    titleWord = "บัณฑิต";
+                } else if (degreeLevel === "ปริญญาโท") {
+                    titleWord = "มหาบัณฑิต";
+                } else if (degreeLevel === "ปริญญาเอก") {
+                    titleWord = "ดุษฎีบัณฑิต";
+                }
+
+                // 4. นำข้อมูลไปแสดงในหน้า Success State
+                document.getElementById('success-title').innerHTML = `ท่านขึ้นทะเบียน<br><span style="color:#19376D;">${titleWord}</span>เรียบร้อยแล้ว`;
+                document.getElementById('res-fullname').textContent = fullname;
+                document.getElementById('res-degree').textContent = degreeLevel;
+                document.getElementById('res-faculty').textContent = faculty;
+                document.getElementById('res-major').textContent = major;
+                
+                // จัดการเรื่องเกียรตินิยม (ถ้าไม่มีให้ซ่อนบรรทัดนั้นไปเลยเพื่อให้ดูคลีน)
+                const honorsRow = document.getElementById('row-honors');
+                if (honors === "ไม่มี" || degreeLevel !== "ปริญญาตรี") {
+                    honorsRow.style.display = "none";
+                } else {
+                    document.getElementById('res-honors').textContent = honors;
+                    honorsRow.style.display = "flex";
+                }
+
+                // 5. สลับหน้าจอ
                 formState.style.display = 'none';
                 successState.style.display = 'block';
 
